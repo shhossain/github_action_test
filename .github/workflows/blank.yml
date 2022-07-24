@@ -41,9 +41,8 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
       
-      - name: Check a python package version
-        run: |
-          name=curl -I https://pypi.org/pypi/wattpad-scraper/0.0.5/
+      - name: Check a 
+        run: curl
         shell: bash
 
         
