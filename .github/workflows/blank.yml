@@ -21,6 +21,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       name: 'sifat'
+    
+    outputs:
+      output1: ${{ steps.step1.outputs.test }}
       
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -39,11 +42,9 @@ jobs:
           echo test, and deploy your project.
       
       - name: Check a python package version
-        run: status = curl -s -o /dev/null -I -w "%{http_code}" https://pypi.org/pypi/wattpad-scraper/0.0.5/
+        run: echo "::set-output name=test::curl -s -o /dev/null -I -w "%{http_code}" https://pypi.org/pypi/wattpad-scraper/0.0.5/"
 
         
         
 
-      - name: Print the variable
-        run: |
-          echo ${status}
+      
