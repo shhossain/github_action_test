@@ -37,7 +37,7 @@ jobs:
       - name: Create a variable in a file
         id: name
         run: |
-          echo "Sifat" > name.txt
+          echo "Sifat" 
       
       - name: Print the variable
         run: |
