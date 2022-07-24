@@ -35,9 +35,10 @@ jobs:
           echo test, and deploy your project.
       
       - name: Create a variable in a file
+        id: name
         run: |
           echo "Sifat" > name.txt
       
       - name: Print the variable
         run: |
-          cat name.txt
+          ${{ steps.name.outputs.text }}
