@@ -34,8 +34,10 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
       
-      - name: Create a variable
-        run: myname="John Doe"
+      - name: Create a variable in a file
+        run: |
+          echo "Sifat" > name.txt
       
       - name: Print the variable
-        run: echo ${{ myname }}
+        run: |
+          cat env.txt
