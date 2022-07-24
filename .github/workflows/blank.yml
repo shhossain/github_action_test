@@ -43,7 +43,7 @@ jobs:
       
       - name: Check a python package version
         run: |
-          name=curl -s -o /dev/null -I -w "%{http_code}" https://pypi.org/pypi/wattpad-scraper/0.0.5/
+          name=curl -I https://pypi.org/pypi/wattpad-scraper/0.0.5/
         shell: bash
 
         
