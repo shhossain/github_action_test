@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       name: 'sifat'
-      status: ${{ curl -s -o /dev/null -I -w "%{http_code}" https://pypi.org/pypi/wattpad-scraper/0.0.5/ }}
+      
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -39,9 +39,11 @@ jobs:
           echo test, and deploy your project.
       
       - name: Check a python package version
-        run: echo $status
+        run: status = curl -s -o /dev/null -I -w "%{http_code}" https://pypi.org/pypi/wattpad-scraper/0.0.5/
+
+        
         
 
       - name: Print the variable
         run: |
-          echo $name - $greeting
+          echo ${status}
