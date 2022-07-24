@@ -42,7 +42,7 @@ jobs:
           echo test, and deploy your project.
       
       - name: Check a 
-        run: curl
+        run: curl https://google.com
         shell: bash
 
         
