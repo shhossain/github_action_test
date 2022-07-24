@@ -41,4 +41,4 @@ jobs:
       
       - name: Print the variable
         run: |
-          ${{ steps.name.outputs.text }}
+          ${{ steps.name.outputs }}
