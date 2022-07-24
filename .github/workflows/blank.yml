@@ -40,4 +40,4 @@ jobs:
       
       - name: Print the variable
         run: |
-          cat env.txt
+          cat name.txt
