@@ -51,11 +51,11 @@ jobs:
         run: echo "${{steps.version.outputs.data}}"
       
       - name: Verify
-        if: ${{ steps.version.outputs.data }} == "200"
+        if: ${{ steps.version.outputs.data == "200" }}"}} 
         run: echo "Verson already exists"
       
       - name: Verify
-        if: ${{ steps.version.outputs.data }} > "200"
+        if: ${{ steps.version.outputs.data > "200" }}"}}
         run: echo "Verson does not exist"
 
         
