@@ -64,7 +64,7 @@ jobs:
           git config --global user.name shhossain
           git remote set-url origin https://${{secrets.COMMIT_SECRET}}@github.com/shhossain/github_action_test.git
           git fetch --tags --all
-          previous_version=$(git describe --tags --abbrev=0)
+          previous_version=$(git tag -l v[0-9].* | tail -n1)
           echo "previous_version: $previous_version"
       
       - name: Add New Version Tag
