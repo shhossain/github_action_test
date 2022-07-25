@@ -41,24 +41,25 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
       
-      - name: Check a python package version
-        id: version
-        run: |
-          v=$(curl -s -o /dev/null -I -w "%{http_code}" https://pypi.org/pypi/wattpad-scraper/0.0.5/)
-          echo "::set-output name=data::$v"
+      # - name: Check a python package version
+      #   id: version
+      #   run: |
+      #     v=$(curl -s -o /dev/null -I -w "%{http_code}" https://pypi.org/pypi/wattpad-scraper/0.0.5/)
+      #     echo "::set-output name=data::$v"
       
-      - name: Check Version
-        run: echo "${{steps.version.outputs.data}}"
+      # - name: Check Version
+      #   run: echo "${{steps.version.outputs.data}}"
       
-      - name: Verify
-        if: ${{ steps.version.outputs.data == 200}}
-        run: echo "Verson already exists"
+      # - name: Verify
+      #   if: ${{ steps.version.outputs.data == 200}}
+      #   run: echo "Verson already exists"
       
-      - name: Verify
-        if: ${{ steps.version.outputs.data > 200 }}
-        run: echo "Verson does not exist"
+      # - name: Verify
+      #   if: ${{ steps.version.outputs.data > 200 }}
+      #   run: echo "Verson does not exist"
       
       - name: Increment Version
+        id: version
         run: |
           git config --global user.email hossain0338@gmail.com
           git config --global user.name shhossain
@@ -70,6 +71,10 @@ jobs:
           echo "new_version: $new_version"
           git tag -a $new_version -m "Version $new_version"
           git push origin $new_version
+          echo "::set-output name=version::$new_version"
+      
+      - name: Check Version
+        run: echo "${{steps.version.outputs.version}}"
       
       
           
