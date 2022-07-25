@@ -65,6 +65,9 @@ jobs:
           git remote set-url origin https://${{secrets.COMMIT_SECRET}}@github.com/shhossain/github_action_test.git
           previous_version=$(git tag -l | tail -n 1)
           echo "previous_version: $previous_version"
+      
+      - name: Add New Version Tag
+        run: |
           new_version=$(python -c "a = '$previous_version'; b = int(a.split('''.''')[-1]); c = b + 1; d = f'''{'.'.join(a.split('.')[0:-1] + [str(c)])}'''; print(d)")
           echo "new_version: $new_version"
           git tag -a v$new_version -m "Version $new_version"
