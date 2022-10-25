@@ -127,7 +127,7 @@ int main()
 
 # function that tries every possible
 # solution by calling itself recursively
-def TOWUtil(arr, n, curr_elements, no_of_selected_elements,
+def TOWUti(arr, n, curr_elements, no_of_selected_elements,
 			soln, min_diff, Sum, curr_sum, curr_position):
 	
 	# checks whether the it is going

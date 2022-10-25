@@ -64,7 +64,7 @@ def get_random_file_name(extension):
     return rs + extension
 
 
-ERRORS = [0]
+ERRORS = []
 
 class Log:
     def __init__(self, color):
@@ -86,8 +86,11 @@ class Log:
     @staticmethod
     def error(*msg, **kwargs):
         s = " ".join([str(x) for x in msg])
-        ERRORS[0] += 1
-        print(termcolor.colored(s, 'red'), **kwargs)
+        if not "threaded" in kwargs:
+            ERRORS.append(s)
+        else:
+            kwargs.pop("threaded", None)
+            print(termcolor.colored(s, 'red'), **kwargs)
 
     @staticmethod
     def warn(*msg, **kwargs):
@@ -95,8 +98,8 @@ class Log:
         print(termcolor.colored(s, 'yellow'), **kwargs)
 
     @staticmethod
-    def error_occurred():
-        return ERRORS[0] > 0
+    def error_occured():
+        return len(ERRORS) > 0
 
 class LANGUAGE_NOT_SUPPORTED(Exception):
     pass
@@ -213,15 +216,20 @@ class Test:
                 self.test_code(code, language, line_number)
 
     def test_code(self, code, language, line_number):
+        error = False
         try:
             Code(code, language).run()
         except LANGUAGE_NOT_SUPPORTED as e:
             Log.error(e)
+            error = True
         except CODE_EXECUTION_ERROR as e:
             Log.error(f"{language} code execution error in " +
                       self.readme_path + " line " + str(line_number))
             Log.error(e)
-        Log.info(f"{language} code in line {line_number} executed successfully")
+            error = True
+        if not error:
+            Log.info(
+                f"{language} code in line {line_number} executed successfully")
 
     def test(self):
         self.threaded_test()
@@ -264,10 +272,12 @@ def test_all():
     for t in threads:
         t.join()
     
-    if not Log.error_occured:
+    if not Log.error_occured():
         Log.info("All code executed successfully")
     else:
         Log.error("Some error occured while executing code")
+        for error in ERRORS:
+            Log.error(error, threaded=False)
         sys.exit(1)
 
 
