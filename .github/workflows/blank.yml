@@ -10,8 +10,6 @@ on:
   pull_request:
     branches: [ "main" ]
 
-env:
-  greeting: Hello
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -22,8 +20,6 @@ jobs:
     env:
       name: 'sifat'
     
-    outputs:
-      output1: ${{ steps.step1.outputs.test }}
       
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -31,50 +27,20 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      # run test_code.py
+      # setup python
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+        
+      - name: Run test_code.py
+        run: |
+          python test_code.py
+      
+      
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
       
-      # - name: Check a python package version
-      #   id: version
-      #   run: |
-      #     v=$(curl -s -o /dev/null -I -w "%{http_code}" https://pypi.org/pypi/wattpad-scraper/0.0.5/)
-      #     echo "::set-output name=data::$v"
-      
-      # - name: Check Version
-      #   run: echo "${{steps.version.outputs.data}}"
-      
-      # - name: Verify
-      #   if: ${{ steps.version.outputs.data == 200}}
-      #   run: echo "Verson already exists"
-      
-      # - name: Verify
-      #   if: ${{ steps.version.outputs.data > 200 }}
-      #   run: echo "Verson does not exist"
-      
-      - name: Increment Version
-        id: version
-        run: |
-          git config --global user.email hossain0338@gmail.com
-          git config --global user.name shhossain
-          git remote set-url origin https://${{secrets.COMMIT_SECRET}}@github.com/shhossain/github_action_test.git
-          git fetch --tags --all
-          previous_version=$(git tag -l v[0-9].* | tail -n1)
-          echo "previous_version: $previous_version"
-          new_version=$(python -c "a = '$previous_version'; b = int(a.split('.')[-1]) if a.split('.')[-1] else 0; c = b + 1; d = '.'.join(a.split('.')[0:-1] + [str(c)]) if c != 1 else '0.0.1'; d = d if 'v' in d else 'v' + d; print(d)")
-          echo "new_version: $new_version"
-          git tag -a $new_version -m "Version $new_version"
-          git push origin $new_version
-          echo "::set-output name=version::$new_version"
-      
-      - name: Check Version
-        run: echo "${{steps.version.outputs.version}}"
       
       
           
