@@ -200,6 +200,12 @@ class Test:
         for t in threads:
             t.join()
 
+    def normal_test(self):
+        for language in self.codes:
+            for code, line_number in self.codes[language]:
+                Log.info(f"Testing code in line {line_number}")
+                self.test_code(code, language, line_number)
+
     def test_code(self, code, language, line_number):
         try:
             Code(code, language).run()
@@ -212,7 +218,10 @@ class Test:
         Log.info(f"{language} code in line {line_number} executed successfully")
 
     def test(self):
-        self.threaded_test()
+        # self.threaded_test()
+        self.normal_test()
+
+
 
 
 # if __name__ == "__main__":
