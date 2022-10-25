@@ -218,17 +218,17 @@ class GFG
 				soln, sum, 0, 0);
 
 		// Print the solution
-		Console.Write("The first subset is: ");
+		console.Write("The first subset is: ");
 		for (int i = 0; i < n; i++)
 		{
 			if (soln[i] == true)
 				Console.Write(arr[i] + " ");
 		}
-		Console.Write("\nThe second subset is: ");
+		console.Write("\nThe second subset is: ");
 		for (int i = 0; i < n; i++)
 		{
 			if (soln[i] == false)
-				Console.Write(arr[i] + " ");
+				console.Write(arr[i] + " ");
 		}
 	}
 	
