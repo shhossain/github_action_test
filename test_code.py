@@ -153,6 +153,9 @@ class Code:
 
     def run(self):
         file_name = get_random_file_name(self.extension)
+        if self.extension == ".cs":
+            return self.run_dotnet(file_name)
+
         with open(file_name, 'w') as f:
             f.write(self.code)
 
@@ -169,6 +172,43 @@ class Code:
         if stderr:
             raise CODE_EXECUTION_ERROR(stderr.decode())
         return stdout.decode()
+
+    def run_dotnet(self, file_name):
+        Log.info("Running code")
+        Log.debug(f"File name: {file_name}")
+        # create dotnet project
+        cmd = "dotnet new console -o {file_name_without_extension}".format(
+            file_name_without_extension=file_name.split('.')[0])
+        Log.debug(f"Command: {cmd}")
+        process = subprocess.Popen(
+            cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate()
+        if stderr:
+            raise CODE_EXECUTION_ERROR(stderr.decode())
+
+        # move file to project
+        cmd = "move {file_name} {file_name_without_extension}".format(
+            file_name=file_name, file_name_without_extension=file_name.split('.')[0])
+        Log.debug(f"Command: {cmd}")
+        process = subprocess.Popen(
+            cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate()
+        if stderr:
+            raise CODE_EXECUTION_ERROR(stderr.decode())
+
+        # run dotnet project
+        cmd = "dotnet run --project {file_name_without_extension}".format(
+            file_name_without_extension=file_name.split('.')[0])
+        Log.debug(f"Command: {cmd}")
+        process = subprocess.Popen(
+            cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate()
+        self.clean_up(file_name.split('.')[0])
+        if stderr:
+            raise CODE_EXECUTION_ERROR(stderr.decode())
+        return stdout.decode()
+
+
 
     def clean_up(self, file_name):
         # remove file that starts with the same name
