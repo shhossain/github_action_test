@@ -250,7 +250,7 @@ class GFG
 
 ## JAVA 
 
-```
+```java
 // Java program for Tug of war
 import java.util.*;
 import java.lang.*;

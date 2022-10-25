@@ -7,6 +7,7 @@ import os
 import sys
 import threading
 import shutil
+import re
 
 
 # this file is in .github\test_code.py
@@ -87,6 +88,13 @@ def get_random_file_name(extension):
     rs = str(uuid.uuid4()).split("-")[0]
     return rs + extension
 
+# class TugOfWar
+# {
+
+
+def java_file_name(code):
+    return re.search(r'class\s+(\w+)', code).group(1)
+
 
 ERRORS = []
 
@@ -136,11 +144,12 @@ class CODE_EXECUTION_ERROR(Exception):
 
 
 class Code:
-    def __init__(self, code, language) -> None:
+    def __init__(self, code, language, file_path=None) -> None:
         self.code = code
         Log.debug("Language: " + language)
         self.language = self.get_language(language)
         self.extension = SUPPORTED_LANGUAGE[self.language]['extension']
+        self.file_path = file_path
         self.command = self.get_command()
 
     def get_command(self):
@@ -156,10 +165,15 @@ class Code:
         for lang in SUPPORTED_LANGUAGE:
             if language in SUPPORTED_LANGUAGE[lang]['alias']:
                 return lang
-        raise LANGUAGE_NOT_SUPPORTED(f"Language {language} is not supported")
+        raise LANGUAGE_NOT_SUPPORTED(
+            f"{self.file_path}| Language {language} is not supported")
 
     def run(self):
-        file_name = get_random_file_name(self.extension)
+        if self.extension == ".java":
+            file_name = java_file_name(self.code)
+        else:
+            file_name = get_random_file_name(self.extension)
+
         if self.extension == ".cs":
             return self.run_dotnet(file_name)
 
