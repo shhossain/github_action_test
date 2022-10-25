@@ -216,11 +216,11 @@ class Test:
         try:
             Code(code, language).run()
         except LANGUAGE_NOT_SUPPORTED as e:
-            raise e
+            Log.error(e)
         except CODE_EXECUTION_ERROR as e:
             Log.error(f"{language} code execution error in " +
                       self.readme_path + " line " + str(line_number))
-            raise e
+            Log.error(e)
         Log.info(f"{language} code in line {line_number} executed successfully")
 
     def test(self):
