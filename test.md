@@ -218,17 +218,17 @@ class GFG
 				soln, sum, 0, 0);
 
 		// Print the solution
-		console.Write("The first subset is: ");
+		Console.Write("The first subset is: ");
 		for (int i = 0; i < n; i++)
 		{
 			if (soln[i] == true)
 				Console.Write(arr[i] + " ");
 		}
-		console.Write("\nThe second subset is: ");
+		Console.Write("\nThe second subset is: ");
 		for (int i = 0; i < n; i++)
 		{
 			if (soln[i] == false)
-				console.Write(arr[i] + " ");
+				Console.Write(arr[i] + " ");
 		}
 	}
 	
@@ -248,7 +248,7 @@ class GFG
 
 ## JAVA 
 
-```
+```java
 // Java program for Tug of war
 import java.util.*;
 import java.lang.*;
@@ -555,15 +555,15 @@ if __name__ == '__main__':
         TOWUtil(arr, n, curr_elements, 0, soln, sum, 0, 0);
  
         // Print the solution
-        consol.log("The first subset is: ");
+        console.log("The first subset is: ");
         for (var i = 0; i < n; i++) {
             if (soln[i] == true)
-                consol.log(arr[i] + " ");
+                console.log(arr[i] + " ");
         }
-        consol.log("<br/>The second subset is: ");
+        console.log("<br/>The second subset is: ");
         for (var i = 0; i < n; i++) {
             if (soln[i] == false)
-                consol.log(arr[i] + " ");
+                console.log(arr[i] + " ");
         }
     }
  
@@ -571,6 +571,7 @@ if __name__ == '__main__':
         var arr = [ 23, 45, -34, 12, 0, 98, -99, 4, 189, -1, 4 ];
         tugOfWar(arr);
  
+
 ```
 
 
