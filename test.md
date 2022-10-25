@@ -555,15 +555,15 @@ if __name__ == '__main__':
         TOWUtil(arr, n, curr_elements, 0, soln, sum, 0, 0);
  
         // Print the solution
-        document.write("The first subset is: ");
+        consol.log("The first subset is: ");
         for (var i = 0; i < n; i++) {
             if (soln[i] == true)
-                document.write(arr[i] + " ");
+                consol.log(arr[i] + " ");
         }
-        document.write("<br/>The second subset is: ");
+        consol.log("<br/>The second subset is: ");
         for (var i = 0; i < n; i++) {
             if (soln[i] == false)
-                document.write(arr[i] + " ");
+                consol.log(arr[i] + " ");
         }
     }
  
