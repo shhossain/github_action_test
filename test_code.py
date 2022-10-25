@@ -186,8 +186,12 @@ class Code:
         if stderr:
             raise CODE_EXECUTION_ERROR(stderr.decode())
 
-        # move file to project
-        shutil.move(file_name, file_name.split('.')[0])
+        project_path = os.path.join(
+            os.getcwd(), file_name.split('.')[0], file_name)
+        Log.debug(f"Project path: {project_path}")
+        with open(project_path, 'w') as f:
+            f.write(self.code)
+
 
         # run dotnet project
         cmd = "dotnet run --project {file_name_without_extension}".format(
