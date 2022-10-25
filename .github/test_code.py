@@ -8,6 +8,11 @@ import sys
 import threading
 import shutil
 
+
+# this file is in .github\test_code.py
+# chdir to root of repo
+os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 SUPPORTED_LANGUAGE = {
     "python": {
         "extension": ".py",
@@ -85,6 +90,7 @@ def get_random_file_name(extension):
 
 ERRORS = []
 
+
 class Log:
     def __init__(self, color):
         self.color = color
@@ -119,6 +125,7 @@ class Log:
     @staticmethod
     def error_occured():
         return len(ERRORS) > 0
+
 
 class LANGUAGE_NOT_SUPPORTED(Exception):
     pass
@@ -192,7 +199,6 @@ class Code:
         with open(project_path, 'w') as f:
             f.write(self.code)
 
-
         # run dotnet project
         cmd = "dotnet run --project {file_name_without_extension}".format(
             file_name_without_extension=file_name.split('.')[0])
@@ -204,8 +210,6 @@ class Code:
         if stderr:
             raise CODE_EXECUTION_ERROR(stderr.decode())
         return stdout.decode()
-
-
 
     def clean_up(self, file_name):
         # remove file that starts with the same name
@@ -295,8 +299,6 @@ class Test:
         # self.normal_test()
 
 
-
-
 # if __name__ == "__main__":
 #     if len(sys.argv) < 2:
 #         Log.error("No file path given")
@@ -330,7 +332,7 @@ def test_all():
 
     for t in threads:
         t.join()
-    
+
     if not Log.error_occured():
         Log.info("All code executed successfully")
     else:
@@ -338,7 +340,6 @@ def test_all():
         for error in ERRORS:
             Log.error(error, threaded=False)
         sys.exit(1)
-
 
 
 if __name__ == "__main__":
