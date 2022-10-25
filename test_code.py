@@ -59,8 +59,8 @@ SUPPORTED_LANGUAGE = {
     "c#": {
         "extension": ".cs",
         "alias": ["cs", "c#"],
-        "win_cmd": "dotnet run --project {file_name}",
-        "linux_cmd": "dotnet run --project {file_name} --no-build",
+        "win_cmd": "dotnet new console -o {file_name_without_extension} && dotnet run -p {file_name_without_extension}",
+        "linux_cmd": "dotnet new console -o {file_name_without_extension} && dotnet run -p {file_name_without_extension}",
     },
     "ruby": {
         "extension": ".rb",
