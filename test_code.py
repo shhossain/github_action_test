@@ -235,14 +235,16 @@ class Test:
 
 def test_all():
     files = []
-    for file in os.listdir():
-        if file.endswith('.md'):
-            files.append(file)
+    for root, dirs, file in os.walk('.'):
+        for f in file:
+            if f.endswith('.md'):
+                files.append(os.path.join(root, f))
+
 
     Log.info(f"Testing {len(files)} files")
     threads = []
     for file in files:
-        t = threading.Thread(target=Test(file).test)
+        t = threading.Thread(target=Test(file))
         threads.append(t)
         t.start()
 
