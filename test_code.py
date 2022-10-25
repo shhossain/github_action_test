@@ -187,14 +187,21 @@ class Code:
             raise CODE_EXECUTION_ERROR(stderr.decode())
 
         # move file to project
-        cmd = "move {file_name} {file_name_without_extension}".format(
-            file_name=file_name, file_name_without_extension=file_name.split('.')[0])
+        os.rename(file_name, os.path.join(
+            file_name.split('.')[0], file_name))
+
+        # run dotnet project
+        cmd = "dotnet run --project {file_name_without_extension}".format(
+            file_name_without_extension=file_name.split('.')[0])
         Log.debug(f"Command: {cmd}")
         process = subprocess.Popen(
             cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
+        self.clean_up(file_name)
+
         if stderr:
             raise CODE_EXECUTION_ERROR(stderr.decode())
+        return stdout.decode()
 
         # run dotnet project
         cmd = "dotnet run --project {file_name_without_extension}".format(
