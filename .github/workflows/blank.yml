@@ -34,11 +34,16 @@ jobs:
         with:
           python-version: 3.8
         
+      # install dependencies
+      - name: Install dependencies
+        run: |
+          pip install termcolor
+      
       - name: Run test_code.py
         run: |
           python test_code.py
       
-      
+
 
       
       
