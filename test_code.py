@@ -64,6 +64,8 @@ def get_random_file_name(extension):
     return rs + extension
 
 
+ERRORS = [0]
+
 class Log:
     def __init__(self, color):
         self.color = color
@@ -84,6 +86,7 @@ class Log:
     @staticmethod
     def error(*msg, **kwargs):
         s = " ".join([str(x) for x in msg])
+        ERRORS[0] += 1
         print(termcolor.colored(s, 'red'), **kwargs)
 
     @staticmethod
@@ -91,6 +94,9 @@ class Log:
         s = " ".join([str(x) for x in msg])
         print(termcolor.colored(s, 'yellow'), **kwargs)
 
+    @staticmethod
+    def error_occurred():
+        return ERRORS[0] > 0
 
 class LANGUAGE_NOT_SUPPORTED(Exception):
     pass
@@ -218,8 +224,8 @@ class Test:
         Log.info(f"{language} code in line {line_number} executed successfully")
 
     def test(self):
-        # self.threaded_test()
-        self.normal_test()
+        self.threaded_test()
+        # self.normal_test()
 
 
 
@@ -249,16 +255,21 @@ def test_all():
                 files.append(os.path.join(root, f))
 
     Log.info(f"Testing {len(files)} files")
+    threads = []
     for file in files:
-        Log.info(f"Testing file {file}")
-        try:
-            Test(file).test()
-        except LANGUAGE_NOT_SUPPORTED as e:
-            Log.error(e)
-            sys.exit(1)
-        except CODE_EXECUTION_ERROR as e:
-            Log.error(e)
-            sys.exit(1)
+        t = threading.Thread(target=Test(file).test)
+        threads.append(t)
+        t.start()
+
+    for t in threads:
+        t.join()
+    
+    if not Log.error_occured:
+        Log.info("All code executed successfully")
+    else:
+        Log.error("Some error occured while executing code")
+        sys.exit(1)
+
 
 
 if __name__ == "__main__":
