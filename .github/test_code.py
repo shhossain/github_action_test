@@ -24,8 +24,8 @@ SUPPORTED_LANGUAGE = {
     "c++": {
         "extension": ".cpp",
         "alias": ["cpp", "cxx", "cc", "c++"],
-        "win_cmd": "g++ {file_name} -o {exe_file_name} -std=c++17 && {exe_file_name}",
-        "linux_cmd": "g++ {file_name} -o {exe_file_name} -std=c++17 && ./{exe_file_name}",
+        "win_cmd": "g++ {file_name} -o {file_name_without_extension} -std=c++17 && {file_name_without_extension}",
+        "linux_cmd": "g++ {file_name} -o {file_name_without_extension} -std=c++17 && ./{file_name_without_extension}",
     },
     "c": {
         "extension": ".c",
@@ -295,7 +295,7 @@ class Test:
         for language in self.codes:
             for code, line_number in self.codes[language]:
                 Log.info(
-                    f"{self.readme_path} | Testing code in line {line_number}")
+                    f"{self.readme_path} | Testing {language} code in line {line_number}")
                 t = threading.Thread(target=self.test_code, args=(
                     code, language, line_number))
                 threads.append(t)
@@ -308,7 +308,7 @@ class Test:
         for language in self.codes:
             for code, line_number in self.codes[language]:
                 Log.info(
-                    f"{self.readme_path} | Testing code in line {line_number}")
+                    f"{self.readme_path} | Testing {language} code in line {line_number}")
                 self.test_code(code, language, line_number)
 
     def test_code(self, code, language, line_number):
@@ -316,13 +316,13 @@ class Test:
         try:
             output = Code(code, language).run()
             Log.debug(
-                f"{self.readme_path} : {line_number} => ====OUTPUT====\n{output}\n====OUTPUT====")
+                f"{self.readme_path} => \n==<START>==OUTPUT==={language}=\n{output}\n={line_number}===OUTPUT==<END>==")
         except LANGUAGE_NOT_SUPPORTED as e:
             Log.error(e)
             error = True
         except CODE_EXECUTION_ERROR as e:
-            Log.error(f"{self.readme_path} | {language} code execution error in " +
-                      self.readme_path + " line " + str(line_number))
+            Log.error(
+                f"{self.readme_path} | {language} code execution error in ", line_number)
             Log.error(e)
             error = True
         if not error:
