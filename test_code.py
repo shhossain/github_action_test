@@ -6,6 +6,7 @@ import uuid
 import os
 import sys
 import threading
+import shutil
 
 SUPPORTED_LANGUAGE = {
     "python": {
@@ -173,7 +174,7 @@ class Code:
         # remove file that starts with the same name
         for file in os.listdir():
             if file.startswith(file_name.split('.')[0]):
-                os.remove(file)
+                shutil.rmtree(file) if os.path.isdir(file) else os.remove(file)
 
 
 class Test:
