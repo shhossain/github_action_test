@@ -71,7 +71,8 @@ jobs:
       
       - name: Run test_code.py
         run: |
-          python ".github\test_code.py"
+          cd .github
+          python test_code.py
       
 
 
