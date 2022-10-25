@@ -231,8 +231,7 @@ class Test:
         error = False
         try:
             output = Code(code, language).run()
-            Log.debug(f"{language}:{line_number}")
-            Log.debug("Output:\n" + output)
+            Log.debug(f"{language} : {line_number} => ", output)
         except LANGUAGE_NOT_SUPPORTED as e:
             Log.error(e)
             error = True
