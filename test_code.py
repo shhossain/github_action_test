@@ -56,6 +56,18 @@ SUPPORTED_LANGUAGE = {
         "win_cmd": "php {file_name}",
         "linux_cmd": "php {file_name}",
     },
+    "c#": {
+        "extension": ".cs",
+        "alias": ["cs", "c#"],
+        "win_cmd": "csc {file_name} && {file_name_without_extension}",
+        "linux_cmd": "csc {file_name} && ./{file_name_without_extension}",
+    },
+    "ruby": {
+        "extension": ".rb",
+        "alias": ["rb", "ruby"],
+        "win_cmd": "ruby {file_name}",
+        "linux_cmd": "ruby {file_name}",
+    },
 }
 
 
