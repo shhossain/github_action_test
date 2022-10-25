@@ -240,14 +240,16 @@ def test_all():
                 files.append(os.path.join(root, f))
 
     Log.info(f"Testing {len(files)} files")
-    threads = []
     for file in files:
-        t = threading.Thread(target=Test(file).test)
-        threads.append(t)
-        t.start()
-
-    for t in threads:
-        t.join()
+        Log.info(f"Testing file {file}")
+        try:
+            Test(file).test()
+        except LANGUAGE_NOT_SUPPORTED as e:
+            Log.error(e)
+            sys.exit(1)
+        except CODE_EXECUTION_ERROR as e:
+            Log.error(e)
+            sys.exit(1)
 
 
 if __name__ == "__main__":
