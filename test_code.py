@@ -72,7 +72,7 @@ SUPPORTED_LANGUAGE = {
         "extension": ".sh",
         "alias": ["sh", "bash"],
         "win_cmd": "echo 'bash not supported on windows' {file_name}",
-        "linux_cmd": "bash {file_name}",
+        "linux_cmd": "echo {file_name}",
     },
 }
 
