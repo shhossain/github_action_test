@@ -15,6 +15,8 @@ Following is the implementation for Tug of War problem. It prints the required a
 - [C#](#csharp)
 - [Java](#java)
 
+
+
 ## Complexity Analysis
 | Algorithm | Time Complexity | Space Complexity |
 |:---:|:---:|:---:|
@@ -248,7 +250,7 @@ class GFG
 
 ## JAVA 
 
-```java
+```
 // Java program for Tug of war
 import java.util.*;
 import java.lang.*;
