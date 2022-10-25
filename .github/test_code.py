@@ -24,8 +24,8 @@ SUPPORTED_LANGUAGE = {
     "c++": {
         "extension": ".cpp",
         "alias": ["cpp", "cxx", "cc", "c++"],
-        "win_cmd": "g++ {file_name} -o {file_name_without_extension} && {file_name_without_extension}",
-        "linux_cmd": "g++ {file_name} -o {file_name_without_extension} && ./{file_name_without_extension}",
+        "win_cmd": "g++ {file_name} -o {exe_file_name} -std=c++17 && {exe_file_name}",
+        "linux_cmd": "g++ {file_name} -o {exe_file_name} -std=c++17 && ./{exe_file_name}",
     },
     "c": {
         "extension": ".c",
@@ -150,7 +150,25 @@ class Code:
         self.language = self.get_language(language)
         self.extension = SUPPORTED_LANGUAGE[self.language]['extension']
         self.file_path = file_path
+        self.analyze_code()
         self.command = self.get_command()
+
+    def analyze_code(self) -> None:
+        if self.language == "javascript":
+            ch_table = {"<script>": "", "</script>": "",
+                        "document.write": "console.log", "document.writeln": "console.log"}
+            for k, v in ch_table.items():
+                self.code = self.code.replace(k, v)
+
+        elif self.language == "c++":
+            # change all header to <bits/stdc++.h>
+            self.code = re.sub(r'#include\s+<\w+>',
+                               '#include <bits/stdc++.h>', self.code)
+            # change all header to <bits/stdc++.h>
+
+
+
+
 
     def get_command(self):
         if sys.platform == 'win32':
@@ -166,15 +184,15 @@ class Code:
             if language in SUPPORTED_LANGUAGE[lang]['alias']:
                 return lang
         raise LANGUAGE_NOT_SUPPORTED(
-            f"{self.file_path}| Language {language} is not supported")
+            f"{self.file_path} | Language {language} is not supported")
 
     def run(self):
-        if self.extension == ".java":
+        if self.language == "java":
             file_name = java_file_name(self.code)
         else:
             file_name = get_random_file_name(self.extension)
 
-        if self.extension == ".cs":
+        if self.language == "c#":
             return self.run_dotnet(file_name)
 
         with open(file_name, 'w') as f:
@@ -276,7 +294,8 @@ class Test:
         threads = []
         for language in self.codes:
             for code, line_number in self.codes[language]:
-                Log.info(f"Testing code in line {line_number}")
+                Log.info(
+                    f"{self.readme_path} | Testing code in line {line_number}")
                 t = threading.Thread(target=self.test_code, args=(
                     code, language, line_number))
                 threads.append(t)
@@ -288,25 +307,27 @@ class Test:
     def normal_test(self):
         for language in self.codes:
             for code, line_number in self.codes[language]:
-                Log.info(f"Testing code in line {line_number}")
+                Log.info(
+                    f"{self.readme_path} | Testing code in line {line_number}")
                 self.test_code(code, language, line_number)
 
     def test_code(self, code, language, line_number):
         error = False
         try:
             output = Code(code, language).run()
-            Log.debug(f"{language} : {line_number} => ", output)
+            Log.debug(
+                f"{self.readme_path} : {line_number} => ====OUTPUT====\n{output}\n====OUTPUT====")
         except LANGUAGE_NOT_SUPPORTED as e:
             Log.error(e)
             error = True
         except CODE_EXECUTION_ERROR as e:
-            Log.error(f"{language} code execution error in " +
+            Log.error(f"{self.readme_path} | {language} code execution error in " +
                       self.readme_path + " line " + str(line_number))
             Log.error(e)
             error = True
         if not error:
             Log.info(
-                f"{language} code in line {line_number} executed successfully")
+                f"{self.readme_path} | {language} code in line {line_number} executed successfully")
 
     def test(self):
         self.threaded_test()
