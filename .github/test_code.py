@@ -7,6 +7,7 @@ import os
 import sys
 import threading
 import shutil
+import re
 
 
 # this file is in .github\test_code.py
@@ -64,7 +65,7 @@ SUPPORTED_LANGUAGE = {
     },
     "c#": {
         "extension": ".cs",
-        "alias": ["cs", "c#", "csharp"],
+        "alias": ["cs", "c#"],
         "win_cmd": "dotnet new console -o {file_name_without_extension} && move {file_name} {file_name_without_extension} && dotnet run --project{file_name_without_extension}",
         "linux_cmd": "dotnet new console -o {file_name_without_extension} && mv {file_name} {file_name_without_extension} && dotnet run --project{file_name_without_extension}",
     },
@@ -87,9 +88,12 @@ def get_random_file_name(extension):
     rs = str(uuid.uuid4()).split("-")[0]
     return rs + extension
 
+# class TugOfWar
+# {
+
 
 def java_file_name(code):
-    return code.split("public class")[1].split("{")[0].strip() + ".java"
+    return re.search(r'class\s+(\w+)', code).group(1) + ".java"
 
 
 ERRORS = []
@@ -140,11 +144,12 @@ class CODE_EXECUTION_ERROR(Exception):
 
 
 class Code:
-    def __init__(self, code, language) -> None:
+    def __init__(self, code, language, file_path=None) -> None:
         self.code = code
         Log.debug("Language: " + language)
         self.language = self.get_language(language)
         self.extension = SUPPORTED_LANGUAGE[self.language]['extension']
+        self.file_path = file_path
         self.command = self.get_command()
 
     def get_command(self):
@@ -160,13 +165,15 @@ class Code:
         for lang in SUPPORTED_LANGUAGE:
             if language in SUPPORTED_LANGUAGE[lang]['alias']:
                 return lang
-        raise LANGUAGE_NOT_SUPPORTED(f"Language {language} is not supported")
+        raise LANGUAGE_NOT_SUPPORTED(
+            f"{self.file_path}| Language {language} is not supported")
 
     def run(self):
         if self.extension == ".java":
             file_name = java_file_name(self.code)
         else:
             file_name = get_random_file_name(self.extension)
+
         if self.extension == ".cs":
             return self.run_dotnet(file_name)
 
@@ -248,7 +255,7 @@ class Test:
                         codes[language] = []
                     codes[language].append((code, n+1))
 
-        Log.debug(f"{self.readme_path}| Codes: {len(codes)}")
+        Log.debug(f"Codes: {len(codes)}")
         return codes
 
     # def test(self):
@@ -269,8 +276,7 @@ class Test:
         threads = []
         for language in self.codes:
             for code, line_number in self.codes[language]:
-                Log.info(
-                    f"{self.readme_path}| Testing code in line {line_number}")
+                Log.info(f"Testing code in line {line_number}")
                 t = threading.Thread(target=self.test_code, args=(
                     code, language, line_number))
                 threads.append(t)
@@ -289,19 +295,18 @@ class Test:
         error = False
         try:
             output = Code(code, language).run()
-            Log.debug(
-                f"{self.readme_path}| {language} : {line_number} => ", output)
+            Log.debug(f"{language} : {line_number} => ", output)
         except LANGUAGE_NOT_SUPPORTED as e:
             Log.error(e)
             error = True
         except CODE_EXECUTION_ERROR as e:
-            Log.error(f"{self.readme_path}| {language} code execution error in " +
+            Log.error(f"{language} code execution error in " +
                       self.readme_path + " line " + str(line_number))
             Log.error(e)
             error = True
         if not error:
             Log.info(
-                f"{self.readme_path}| {language} code in line {line_number} executed successfully")
+                f"{language} code in line {line_number} executed successfully")
 
     def test(self):
         self.threaded_test()
