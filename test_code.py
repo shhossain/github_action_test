@@ -154,7 +154,6 @@ class Test:
         self.readme_path = readme_path
         self.codes = self.get_codes()
         Log.debug("Testing code in ", readme_path)
-        self.test()
 
     def get_codes(self):
         codes = {}  # key: language, value: [(code,line_number)]
@@ -240,11 +239,10 @@ def test_all():
             if f.endswith('.md'):
                 files.append(os.path.join(root, f))
 
-
     Log.info(f"Testing {len(files)} files")
     threads = []
     for file in files:
-        t = threading.Thread(target=Test(file))
+        t = threading.Thread(target=Test(file).test)
         threads.append(t)
         t.start()
 

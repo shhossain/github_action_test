@@ -24,7 +24,7 @@ Following is the implementation for Tug of War problem. It prints the required a
 ### CPP
 
 ```cpp
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
 
 // function that tries every possible solution by calling itself recursively
