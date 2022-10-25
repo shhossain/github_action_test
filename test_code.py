@@ -230,7 +230,9 @@ class Test:
     def test_code(self, code, language, line_number):
         error = False
         try:
-            Code(code, language).run()
+            output = Code(code, language).run()
+            Log.debug(f"{language}:{line_number}")
+            Log.debug("Output:\n" + output)
         except LANGUAGE_NOT_SUPPORTED as e:
             Log.error(e)
             error = True
