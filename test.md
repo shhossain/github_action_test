@@ -248,7 +248,7 @@ class GFG
 
 ## JAVA 
 
-```java
+```
 // Java program for Tug of war
 import java.util.*;
 import java.lang.*;
@@ -477,8 +477,8 @@ if __name__ == '__main__':
 ```
 
 ### JavaScript
+```js
 
-<script>
 // javascript program for Tug of war
      var min_diff;
  
@@ -571,8 +571,7 @@ if __name__ == '__main__':
         var arr = [ 23, 45, -34, 12, 0, 98, -99, 4, 189, -1, 4 ];
         tugOfWar(arr);
  
-</script>
-
+```
 
 
 ## Output

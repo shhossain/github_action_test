@@ -68,6 +68,12 @@ SUPPORTED_LANGUAGE = {
         "win_cmd": "ruby {file_name}",
         "linux_cmd": "ruby {file_name}",
     },
+    "bash": {
+        "extension": ".sh",
+        "alias": ["sh", "bash"],
+        "win_cmd": "echo 'bash not supported on windows' {file_name}",
+        "linux_cmd": "bash {file_name}",
+    },
 }
 
 
@@ -182,6 +188,8 @@ class Test:
             for n, line in enumerate(f):
                 if line.startswith('```'):
                     language = line.split('```')[1].strip()
+                    if not language:
+                        continue
                     code = ''
                     for line in f:
                         if line.startswith('```'):
